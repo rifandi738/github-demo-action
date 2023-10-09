@@ -17,7 +17,7 @@ jobs:
         uses: QAInsights/PerfAction@v3.1
         with:
           # jmeter test plan to execute
-          test-plan-path: ''
+          test-plan-path: './Mix Create Update Bilpay.jmx'
 
       - name: Upload Results
         uses: actions/upload-artifact@v2
