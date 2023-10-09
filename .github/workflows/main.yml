@@ -1,30 +1,37 @@
-name: Run JMeter Tests
+name: JMeter Test
 
 on:
   push:
     branches:
-      - main  # Run the workflow when code is pushed to the main branch
-  pull_request:
-    branches:
-      - main  # Run the workflow when a pull request is opened or synchronized for the main branch
+      - main
 
 jobs:
   jmeter:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Set up Java
+    - name: Install Java
       uses: actions/setup-java@v2
       with:
-        java-version: 11
+        distribution: 'adopt'
+        java-version: '11'
 
-    - name: Run JMeter Tests
+    - name: Install JMeter
       run: |
-        wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.5.tgz
-        tar -xf apache-jmeter-5.5.tgz
-        cd apache-jmeter-5.5/bin
-        ./jmeter -n -t D:/apache-jmeter-5.5/bin/Ringkasan Materi/Mix Create Update Bilpay.jmx -l results.jtl
+        wget https://downloads.apache.org/jmeter/binaries/apache-jmeter-5.5.tgz
+        tar -xzf apache-jmeter-5.5.tgz
       working-directory: ${{ github.workspace }}
+
+    - name: Run JMeter Test
+      run: |
+        ./apache-jmeter-5.5/bin/jmeter -n -t Mix Create Update Bilpay.jmx -l results.jtl
+      working-directory: ${{ github.workspace }}
+
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v2
+      with:
+        name: jmeter-results
+        path: results.jtl
